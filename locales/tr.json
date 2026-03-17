@@ -1,0 +1,18 @@
+{
+  "title": "LoL Bekleme Süresi Hesaplama",
+  "navTitle": "Bekleme Süresi Hesaplayıcı",
+  "searchPlaceholder": "Şampiyon ara (Örn: Kayn)...",
+  "calculateBtn": "Değerleri Hesapla",
+  "abilityHaste": "Yetenek Hızı",
+  "delete": "Sil",
+  "resultsTitle": "Bekleme Süresi Sonuçları",
+  "backBtn": "Geri Dön & Yeni Ekle",
+  "ability": "Yetenek",
+  "original": "Orjinal (Sn)",
+  "new": "Yeni (Sn)",
+  "student": "Yazılım Mühendisliği Öğrencisi",
+  "inspect": "GitHub'da İncele",
+  "disclaimer": "Bu proje Riot Games tarafından desteklenmemektedir ve Riot Games'in resmi görüşlerini yansıtmaz. League of Legends, Riot Games, Inc.'nin tescilli markasıdır.",
+  "description": "League of Legends şampiyonlarının yetenek hızı ve bekleme süresi değerlerini anında hesaplayın. Tüm şampiyonlar için güncel LoL verileri.",
+  "keywords": "lol bekleme süresi, lol yetenek hızı hesaplama, lol cooldown hesaplama, league of legends, şampiyon bekleme süresi"
+}

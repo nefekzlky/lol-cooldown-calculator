@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="<%= getLocale() %>" data-bs-theme="dark">
+<head>
+    <%- include('partials/head') %>
+</head>
+<body class="bg-dark text-light d-flex flex-column min-vh-100">
+    
+    <%- include('partials/navbar') %>
+
+    <div class="container mb-5 flex-grow-1" style="max-width: 1200px;">
+        
+        <div class="d-flex justify-content-between align-items-center mb-4 mt-2">
+            <h2 class="text-warning m-0"><%= __('resultsTitle') %></h2>
+            <a href="/?lang=<%= getLocale() %>" class="btn btn-outline-light shadow-sm"><%= __('backBtn') %></a>
+        </div>
+
+        <% if (results && results.length > 0) { %>
+            <form id="liveUpdateForm" action="/calculate" method="GET">
+                <input type="hidden" name="lang" value="<%= getLocale() %>">
+
+                <div class="row g-4">
+                    <% results.forEach(champ => { %>
+                        <div class="col-lg-6 col-md-12">
+                            <div class="card bg-secondary text-light shadow-lg border-secondary">
+                                
+                                <div class="card-header border-secondary d-flex justify-content-between align-items-center bg-dark p-3">
+                                    <div class="d-flex align-items-center">
+                                        <img src="<%= champ.champImage %>" class="rounded-circle me-3 border border-warning shadow-sm" style="width: 56px; height: 56px;" alt="<%= champ.name %>">
+                                        <h4 class="m-0 text-warning"><%= champ.name %></h4>
+                                        <input type="hidden" name="champions" value="<%= champ.id %>">
+                                    </div>
+                                    
+                                    <div class="input-group shadow-sm" style="width: 190px;">
+                                        <span class="input-group-text bg-secondary text-light border-secondary fw-bold" style="font-size: 0.85rem;"><%= __('abilityHaste') %></span>
+                                        <input type="number" name="haste_<%= champ.id %>" value="<%= champ.haste %>" min="0" class="form-control bg-dark text-light border-secondary text-center fw-bold fs-6" onchange="document.getElementById('liveUpdateForm').submit()" onfocus="this.select()">
+                                    </div>
+                                </div>
+                                
+                                <div class="card-body p-0">
+                                    <div class="table-responsive">
+                                        <table class="table table-dark table-striped table-hover m-0 align-middle">
+                                            <thead>
+                                                <tr>
+                                                    <th class="ps-3"><%= __('ability') %></th>
+                                                    <th class="text-center"><%= __('original') %></th>
+                                                    <th class="text-success text-center"><%= __('new') %></th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% champ.spells.forEach(spell => { %>
+                                                    <tr>
+                                                        <td class="fw-bold ps-3 py-2">
+                                                            <img src="<%= spell.image %>" alt="<%= spell.name %>" class="rounded me-2 border border-secondary shadow-sm" style="width: 32px; height: 32px;">
+                                                            <%= spell.name %>
+                                                        </td>
+                                                        <td class="text-muted text-center py-2" style="font-size: 0.9rem;"><%= spell.originalCooldowns.join(' / ') %></td>
+                                                        <td class="text-success fw-bold text-center py-2"><%= spell.newCooldowns.join(' / ') %></td>
+                                                    </tr>
+                                                <% }) %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    <% }) %>
+                </div>
+            </form>
+        <% } %>
+
+    </div>
+
+    <%- include('partials/footer') %>
+
+</body>
+</html>

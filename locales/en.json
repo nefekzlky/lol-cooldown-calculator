@@ -1,0 +1,18 @@
+{
+  "title": "LoL Cooldown Calculator",
+  "navTitle": "Cooldown Calculator",
+  "searchPlaceholder": "Search champion (Ex: Kayn)...",
+  "calculateBtn": "Calculate Cooldowns",
+  "abilityHaste": "Ability Haste",
+  "delete": "Delete",
+  "resultsTitle": "Cooldown Results",
+  "backBtn": "Go Back & Add New",
+  "ability": "Ability",
+  "original": "Original (Sec)",
+  "new": "New (Sec)",
+  "student": "Software Engineering Student",
+  "inspect": "View on GitHub",
+  "disclaimer": "This project is not endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing League of Legends. League of Legends and Riot Games are trademarks or registered trademarks of Riot Games, Inc.",
+  "description": "Instantly calculate ability haste and cooldown values for all League of Legends champions. Up-to-date stats for every champion.",
+  "keywords": "lol cooldown calculator, lol ability haste, league of legends cooldowns, champ cooldown, ability haste to cooldown"
+}
