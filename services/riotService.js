@@ -1,26 +1,40 @@
 const axios = require('axios');
 
-// Using a fixed Data Dragon version. Consider fetching the latest version dynamically in future iterations.
-const VERSION = '14.5.1'; 
+// En güncel yamayı hafızada tutmak için (Her seferinde Riot'u yormamak adına)
+let cachedVersion = null;
 
 /**
- * Constructs the base URL for Riot Data Dragon based on the selected language.
- * * @param {string} lang - The application's current language ('tr' or 'en').
- * @returns {string} The formatted Data Dragon base URL.
+ * Fetches the latest patch version from Riot's API (e.g., '14.6.1').
  */
-function getBaseUrl(lang) {
+async function getLatestVersion() {
+    if (cachedVersion) return cachedVersion; // Hafızada varsa direkt onu kullan
+    
+    try {
+        const response = await axios.get('https://ddragon.leagueoflegends.com/api/versions.json');
+        cachedVersion = response.data[0]; // Dizideki ilk eleman her zaman en güncel yamadır
+        return cachedVersion;
+    } catch (error) {
+        console.error("Error fetching patch version:", error.message);
+        return '14.5.1'; // Hata olursa sitenin çökmemesi için yedek yama
+    }
+}
+
+/**
+ * Constructs the base URL for Riot Data Dragon dynamically based on the latest patch.
+ */
+async function getBaseUrl(lang) {
+    const version = await getLatestVersion();
     const riotLang = lang === 'en' ? 'en_US' : 'tr_TR';
-    return `https://ddragon.leagueoflegends.com/cdn/${VERSION}/data/${riotLang}`;
+    return `https://ddragon.leagueoflegends.com/cdn/${version}/data/${riotLang}`;
 }
 
 /**
  * Fetches the brief list of all champions.
- * * @param {string} [lang='tr'] - The language parameter.
- * @returns {Promise<Array>} Array of champion objects or an empty array if the request fails.
  */
 async function getChampions(lang = 'tr') {
     try {
-        const response = await axios.get(`${getBaseUrl(lang)}/champion.json`);
+        const baseUrl = await getBaseUrl(lang);
+        const response = await axios.get(`${baseUrl}/champion.json`);
         return Object.values(response.data.data);
     } catch (error) {
         console.error("Error fetching champions data:", error.message);
@@ -30,13 +44,11 @@ async function getChampions(lang = 'tr') {
 
 /**
  * Fetches detailed data (including spells) for a specific champion.
- * * @param {string} championId - The unique ID of the champion (e.g., 'Aatrox').
- * @param {string} [lang='tr'] - The language parameter.
- * @returns {Promise<Object|null>} The champion detail object or null if the request fails.
  */
 async function getChampionDetails(championId, lang = 'tr') {
     try {
-        const response = await axios.get(`${getBaseUrl(lang)}/champion/${championId}.json`);
+        const baseUrl = await getBaseUrl(lang);
+        const response = await axios.get(`${baseUrl}/champion/${championId}.json`);
         return response.data.data[championId];
     } catch (error) {
         console.error(`Error fetching details for ${championId}:`, error.message);
