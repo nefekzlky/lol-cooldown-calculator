@@ -10,7 +10,7 @@ A dynamic web application that instantly calculates new ability cooldowns based 
 
 ### 🌐 Live Demo
 
-[Coming Soon]
+https://lol-cooldown-calculator.vercel.app/
 
 ### 🚀 Features
 
@@ -109,7 +109,7 @@ League of Legends şampiyonlarının yetenek hızına (Ability Haste) göre yeni
 
 ### 🌐 Canlı Demo
 
-[Çok Yakında Eklenecek]
+https://lol-cooldown-calculator.vercel.app/
 
 ### 🚀 Özellikler
 
