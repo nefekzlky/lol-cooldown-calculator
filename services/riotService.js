@@ -1,21 +1,20 @@
 const axios = require('axios');
 
-// En güncel yamayı hafızada tutmak için (Her seferinde Riot'u yormamak adına)
 let cachedVersion = null;
 
 /**
  * Fetches the latest patch version from Riot's API (e.g., '14.6.1').
  */
 async function getLatestVersion() {
-    if (cachedVersion) return cachedVersion; // Hafızada varsa direkt onu kullan
+    if (cachedVersion) return cachedVersion; 
     
     try {
         const response = await axios.get('https://ddragon.leagueoflegends.com/api/versions.json');
-        cachedVersion = response.data[0]; // Dizideki ilk eleman her zaman en güncel yamadır
+        cachedVersion = response.data[0]; 
         return cachedVersion;
     } catch (error) {
         console.error("Error fetching patch version:", error.message);
-        return '14.5.1'; // Hata olursa sitenin çökmemesi için yedek yama
+        return '14.5.1'; 
     }
 }
 
@@ -58,5 +57,6 @@ async function getChampionDetails(championId, lang = 'tr') {
 
 module.exports = {
     getChampions,
-    getChampionDetails
+    getChampionDetails,
+    getLatestVersion
 };

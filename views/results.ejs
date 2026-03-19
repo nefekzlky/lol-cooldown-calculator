@@ -8,60 +8,81 @@
     <%- include('partials/navbar') %>
 
     <div class="container mb-5 flex-grow-1" style="max-width: 1200px;">
-        
-        <div class="d-flex justify-content-between align-items-center mb-4 mt-2">
-            <h2 class="text-warning m-0"><%= __('resultsTitle') %></h2>
-            <a href="/?lang=<%= getLocale() %>" class="btn btn-outline-light shadow-sm"><%= __('backBtn') %></a>
+
+        <div class="d-flex align-items-center gap-3 mb-4 mt-2 flex-wrap">
+            <h2 class="text-warning m-0 me-auto"><%= __('resultsTitle') %></h2>
+
+            <div class="position-relative" style="width: 280px;">
+                <input type="text" id="searchInput"
+                    class="form-control bg-dark text-light border-secondary shadow-sm"
+                    placeholder="<%= __('searchPlaceholder') %>"
+                    autocomplete="off">
+                <ul id="suggestionList" class="list-group position-absolute w-100 mt-1 shadow-lg"
+                    style="z-index: 1000; display: none; max-height: 250px; overflow-y: auto;"></ul>
+            </div>
+
+            <a href="/?lang=<%= getLocale() %>" class="btn btn-outline-light shadow-sm">
+                <%= __('backBtn') %>
+            </a>
         </div>
 
         <% if (results && results.length > 0) { %>
             <form id="liveUpdateForm" action="/calculate" method="GET">
                 <input type="hidden" name="lang" value="<%= getLocale() %>">
 
-                <div class="row g-4">
+                <div class="row g-3">
                     <% results.forEach(champ => { %>
-                        <div class="col-lg-6 col-md-12">
+                        <div class="col-lg-4 col-md-6 col-12">
                             <div class="card bg-secondary text-light shadow-lg border-secondary">
                                 
                                 <div class="card-header border-secondary d-flex justify-content-between align-items-center bg-dark p-3">
                                     <div class="d-flex align-items-center">
-                                        <img src="<%= champ.champImage %>" class="rounded-circle me-3 border border-warning shadow-sm" style="width: 56px; height: 56px;" alt="<%= champ.name %>">
-                                        <h4 class="m-0 text-warning"><%= champ.name %></h4>
+                                        <img src="<%= champ.champImage %>"
+                                            class="rounded-circle me-2 border border-warning shadow-sm"
+                                            style="width: 44px; height: 44px;" alt="<%= champ.name %>">
+                                        <h6 class="m-0 text-warning"><%= champ.name %></h6>
                                         <input type="hidden" name="champions" value="<%= champ.id %>">
                                     </div>
                                     
-                                    <div class="input-group shadow-sm" style="width: 190px;">
-                                        <span class="input-group-text bg-secondary text-light border-secondary fw-bold" style="font-size: 0.85rem;"><%= __('abilityHaste') %></span>
-                                        <input type="number" name="haste_<%= champ.id %>" value="<%= champ.haste %>" min="0" class="form-control bg-dark text-light border-secondary text-center fw-bold fs-6" onchange="document.getElementById('liveUpdateForm').submit()" onfocus="this.select()">
+                                    <div class="input-group input-group-sm shadow-sm" style="width: 150px;">
+                                        <span class="input-group-text bg-secondary text-light border-secondary fw-bold" style="font-size: 0.78rem;"><%= __('abilityHaste') %></span>
+                                        <input type="number"
+                                            name="haste_<%= champ.id %>"
+                                            value="<%= champ.haste %>"
+                                            min="0"
+                                            class="form-control bg-dark text-light border-secondary text-center fw-bold"
+                                            onchange="document.getElementById('liveUpdateForm').submit()"
+                                            onfocus="this.select()">
                                     </div>
                                 </div>
                                 
                                 <div class="card-body p-0">
-                                    <div class="table-responsive">
-                                        <table class="table table-dark table-striped table-hover m-0 align-middle">
-                                            <thead>
+                                    <table class="table table-dark table-striped table-hover m-0 align-middle">
+                                        <thead>
+                                            <tr>
+                                                <th class="ps-3"><%= __('ability') %></th>
+                                                <th class="text-success text-center"><%= __('new') %></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <% champ.spells.forEach(spell => { %>
                                                 <tr>
-                                                    <th class="ps-3"><%= __('ability') %></th>
-                                                    <th class="text-center"><%= __('original') %></th>
-                                                    <th class="text-success text-center"><%= __('new') %></th>
+                                                    <td class="fw-bold ps-3 py-2">
+                                                        <img src="<%= spell.image %>"
+                                                            alt="<%= spell.name %>"
+                                                            class="rounded me-2 border border-secondary shadow-sm"
+                                                            style="width: 28px; height: 28px;">
+                                                        <%= spell.name %>
+                                                    </td>
+                                                    <td class="text-success fw-bold text-center py-2">
+                                                        <%= spell.newCooldowns.join(' / ') %>
+                                                    </td>
                                                 </tr>
-                                            </thead>
-                                            <tbody>
-                                                <% champ.spells.forEach(spell => { %>
-                                                    <tr>
-                                                        <td class="fw-bold ps-3 py-2">
-                                                            <img src="<%= spell.image %>" alt="<%= spell.name %>" class="rounded me-2 border border-secondary shadow-sm" style="width: 32px; height: 32px;">
-                                                            <%= spell.name %>
-                                                        </td>
-                                                        <td class="text-muted text-center py-2" style="font-size: 0.9rem;"><%= spell.originalCooldowns.join(' / ') %></td>
-                                                        <td class="text-success fw-bold text-center py-2"><%= spell.newCooldowns.join(' / ') %></td>
-                                                    </tr>
-                                                <% }) %>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                            <% }) %>
+                                        </tbody>
+                                    </table>
                                 </div>
-                                
+
                             </div>
                         </div>
                     <% }) %>
@@ -73,5 +94,96 @@
 
     <%- include('partials/footer') %>
 
+    <script id="champData" type="application/json">
+        <%- JSON.stringify(champions) %>
+    </script>
+
+    <script>
+        const patchVersion = "<%= version %>";
+
+        const searchInput    = document.getElementById('searchInput');
+        const suggestionList = document.getElementById('suggestionList');
+        const liveForm       = document.getElementById('liveUpdateForm');
+
+        let championsData = [];
+        try {
+            championsData = JSON.parse(document.getElementById('champData').textContent);
+        } catch(e) { console.error('Şampiyon verisi okunamadı', e); }
+
+        const existingIds = new Set(
+            [...document.querySelectorAll('input[name="champions"]')].map(i => i.value)
+        );
+
+        const normalize = str => str.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+        searchInput.addEventListener('input', e => {
+            const val = normalize(e.target.value);
+            suggestionList.innerHTML = '';
+            if (!val) { suggestionList.style.display = 'none'; return; }
+
+            const matches = championsData.filter(c =>
+                !existingIds.has(c.id) &&
+                (normalize(c.name).includes(val) || normalize(c.id).includes(val))
+            );
+
+            matches.forEach(m => {
+                const li = document.createElement('li');
+                li.className = 'list-group-item list-group-item-dark list-group-item-action d-flex align-items-center';
+                li.style.cursor = 'pointer';
+                li.innerHTML = `
+                    <img src="https://ddragon.leagueoflegends.com/cdn/${patchVersion}/img/champion/${m.id}.png"
+                        class="rounded-circle me-2 shadow-sm" style="width:28px;height:28px;">
+                    <span class="fw-bold text-warning">${m.name}</span>
+                `;
+                li.onclick = () => addAndSubmit(m);
+                suggestionList.appendChild(li);
+            });
+
+            suggestionList.style.display = matches.length > 0 ? 'block' : 'none';
+        });
+
+        searchInput.addEventListener('keydown', e => {
+            if (e.key !== 'Enter') return;
+            e.preventDefault();
+            const val = normalize(searchInput.value);
+            if (!val) return;
+            const first = championsData.find(c =>
+                !existingIds.has(c.id) &&
+                (normalize(c.name).includes(val) || normalize(c.id).includes(val))
+            );
+            if (first) addAndSubmit(first);
+        });
+
+        function addAndSubmit(champ) {
+            sessionStorage.setItem('focusChamp', champ.id);
+
+            const hiddenId = document.createElement('input');
+            hiddenId.type = 'hidden';
+            hiddenId.name = 'champions';
+            hiddenId.value = champ.id;
+
+            const hiddenHaste = document.createElement('input');
+            hiddenHaste.type = 'hidden';
+            hiddenHaste.name = `haste_${champ.id}`;
+            hiddenHaste.value = '0';
+
+            liveForm.appendChild(hiddenId);
+            liveForm.appendChild(hiddenHaste);
+            liveForm.submit();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const focusChamp = sessionStorage.getItem('focusChamp');
+            if (focusChamp) {
+                sessionStorage.removeItem('focusChamp');
+                const input = document.querySelector(`input[name="haste_${focusChamp}"]`);
+                if (input) { input.focus(); input.select(); }
+            }
+        });
+
+        document.addEventListener('click', e => {
+            if (e.target !== searchInput) suggestionList.style.display = 'none';
+        });
+    </script>
 </body>
 </html>
